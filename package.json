@@ -1,11 +1,11 @@
 {
   "name": "express-boilerplate",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a boilerplate project used for starting new projects!",
   "main": "index.js",
   "scripts": {
     "test": "mocha --require test/setup.js",
-    "dev":" nodemon src/server.js",
+    "dev": " nodemon src/server.js",
     "start": "node src/server.js",
     "predeploy": "npm audit",
     "deploy": "git push heroku master"
@@ -25,5 +25,8 @@
     "mocha": "^8.2.1",
     "nodemon": "^2.0.6",
     "supertest": "^6.0.1"
+  },
+  "directories": {
+    "test": "test"
   }
 }
