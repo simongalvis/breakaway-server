@@ -40,7 +40,7 @@ context(`Given no users`, () =>{
 
 context('Given there are users in the database', () =>{
     const testUsers = makeUsersArray();
-    //const testActivities = makeActivitiesArray();
+    
 
     beforeEach('insert users', () => {
         return db
@@ -106,7 +106,7 @@ describe(`POST /api/users`, () =>{
             .expect(201)
             .expect(res =>{
                 expect(res.body.fullname).to.eql(newUser.fullname)
-                expect(res.body.lastname).to.eql(newUser.lastname)
+                expect(res.body.username).to.eql(newUser.username)
                 expect(res.body.password).to.eql(newUser.password)
                 expect(res.body).to.have.property('id')
                 expect(res.headers.location).to.eql(`/api/users/${res.body.id}`)
@@ -123,7 +123,7 @@ describe(`POST /api/users`, () =>{
             
 
     })
-    const requiredFields = ['fullname', 'lastname', 'password']
+    const requiredFields = ['fullname', 'username', 'password']
 
     requiredFields.forEach(field => {
         const newUser = {
@@ -146,6 +146,113 @@ describe(`POST /api/users`, () =>{
       })
 })
 
+describe(`DELETE /api/users/:user_id`, () => {
+    context(`Given no users`, () =>{
+        it(`responds with 404`, () => {
+            const userId = 1234567
+            return supertest(app)
+              .delete(`/api/users/${userId}`)
+              .expect(404, { error: { message: `User doesn't exist` } })
+          })
+    })
+    context('Given there are users in the database', () => {
+        const testUsers = makeUsersArray();
+        
+  
+        beforeEach('insert users', () => {
+          return db
+            .into('breakaway_users')
+            .insert(testUsers)
+            
+        })
+  
+        it('responds with 204 and removes the user', () => {
+          const idToRemove = 1
+          const expectedUsers = testUsers.filter(user => user.id !== idToRemove)
+          return supertest(app)
+            .delete(`/api/users/${idToRemove}`)
+            .expect(204)
+            .then(res =>
+              supertest(app)
+                .get(`/api/users`)
+                .expect(expectedUsers)
+            )
+        })
+      })
+})
+
+describe(`PATCH /api/users/:user_id`, () =>{
+    context(`given no users`, () =>{
+        it(`responds with 404`, () =>{
+            const userId=1234567
+        return supertest(app)
+            .patch(`/api/users/${userId}`)
+            .expect(404, { error: { message: `User doesn't exist` } } )
+        })
+    })
+
+    context('Given there are users in the database', () =>{
+        const testUsers = makeUsersArray();
+        beforeEach(`insert users`, () =>{
+            return db
+                .into(`breakaway_users`)
+                .insert(testUsers)
+        })
+        it(`responds with 204 and updates the user`, () =>{
+            const userId = 1
+            const updateUser = {
+                fullname: 'John Pepperton',
+                username: 'jpepp018',
+                password: 'peppersaremyfavorite'
+            }
+            const expectedUser = {
+                ...testUsers[userId -1], 
+                ...updateUser
+            }
+            return supertest(app)
+                .patch(`/api/users/${userId}`)
+                .send(updateUser)
+                .expect(204)
+                .then(res =>{
+                    supertest(app)
+                        .get(`/api/users/${userId}`)
+                        .expect(expectedUser)
+                })
+        })
+        it(`responds with 400 when no fields are supplied`, () =>{
+            const userId = 1
+            return supertest(app)
+                .patch(`/api/users/${userId}`)
+                .send('')
+                .expect(400, { error: { message: `Request body must contain either 'fullname', 'username', or 'password'` } })
+        })
+        it(`responds with 204 when updating only a subset of fields`, () =>{
+            const userId = 1;
+            const updateUser = {
+                fullname:'johnpeppertown'
+            }
+            const expectedUser = {
+                ...testUsers[userId - 1],
+                ...updateUser
+            }
+
+            return supertest(app)
+                .patch(`/api/users/${userId}`)
+                .send(updateUser)
+                .expect(204)
+                .then(res =>{
+                    supertest(app)
+                    .get(`/api/users/${userId}`)
+                    .expect(expectedUser)
+                })
+        })
+
+
+
+
+    
+    })
+})
 
 
 
