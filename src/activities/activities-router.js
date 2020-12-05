@@ -97,6 +97,7 @@ const serializeActivity = activity => ({
         error: {
           message: `Request body must contain either 'title', 'duration', 'distance', or 'description'`
         }
+        //incluse user_id?
       })
 
     ActivitiesService.updateActivity(
