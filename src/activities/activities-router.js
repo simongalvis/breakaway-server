@@ -19,6 +19,7 @@ const serializeActivity = activity => ({
 
   activitiesRouter
   .route('/')
+  //hello
   .get((req, res, next) => {
     const knexInstance = req.app.get('db')
     ActivitiesService.getAllActivities(knexInstance)
