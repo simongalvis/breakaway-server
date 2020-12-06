@@ -39,9 +39,11 @@ const serializeActivity = activity => ({
       }
     }
 
+    newActivity.user_id = user_id;
     newActivity.title = title;
     newActivity.duration = duration;
     newActivity.distance = distance;
+    newActivity.description = description;
 
     ActivitiesService.insertActivity(
       req.app.get('db'),
