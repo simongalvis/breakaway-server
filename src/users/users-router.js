@@ -78,7 +78,7 @@ catch(error){
 
       const knexInstance = req.app.get('db')
       UsersService.getAllUsers(knexInstance)
-      .then(users => users.find(user => user.fullname == req.body.fullname))
+      .then(users => users.find(user => user.username == req.body.username))
       .then(async user => {if(user == null) {
          res.status(400).send(`Cannot find user`)
       }
@@ -87,20 +87,12 @@ catch(error){
          res.send('Success')
        }
        else{
-         res.status(200).send('Not Allowed')
+         res.status(400).send('Not Allowed')
        }
       }
       catch{
         res.status(500).send()
       }})
-     /*  UsersService.getAllUsers(knexInstance)
-      .then(users => {
-        res.json(users.map(serializeUser))
-      })
-      .catch(next)  */
-        
-      
-//res.status(200).send(users);
 
   })
     
