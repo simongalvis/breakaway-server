@@ -2,6 +2,7 @@ const path = require('path')
 const express = require('express')
 const xss = require('xss')
 const UsersService = require('./users-service')
+const bcrypt = require('bcrypt')
 
 const usersRouter = express.Router()
 const jsonParser = express.json()
@@ -25,33 +26,51 @@ const serializeUser = user => ({
       })
       .catch(next)
   })
-  .post(jsonParser, (req, res, next) => {
-    const { fullname, username, password } = req.body
+  .post(jsonParser, async (req, res, next) => {
+    
+
+    try{
+      const salt = await bcrypt.genSalt()
+      const hashedPassword = await bcrypt.hash(req.body.password, salt)
+
+      //console.log(salt)
+      //console.log(hashedPassword)
+
+      const { fullname, username } = req.body
+      const password = hashedPassword;
     const newUser = { fullname, username, password }
 
     for (const [key, value] of Object.entries(newUser)) {
       if (value == null) {
-        return res.status(400).json({
-          error: { message: `Missing '${key}' in request body` }
-        })
+        throw new Error(`Missing '${key}' in request body`)
       }
     }
-
-    newUser.fullname = fullname;
-    newUser.password = password;
-    newUser.username = username;
-
-    UsersService.insertUser(
-      req.app.get('db'),
-      newUser
-    )
-      .then(user => {
-        res
-          .status(201)
-          .location(path.posix.join(req.originalUrl, `/${user.id}`))
-          .json(serializeUser(user))
-      })
-      .catch(next)
+  
+      newUser.fullname = fullname;
+      newUser.password = password;
+      newUser.username = username;
+  
+      UsersService.insertUser(
+        req.app.get('db'),
+        newUser
+      )
+        .then(user => {
+          res
+            .status(201)
+            .location(path.posix.join(req.originalUrl, `/${user.id}`))
+            .json(serializeUser(user))
+        })
+        
+        
+    }
+    
+catch(error){
+  
+     res.status(400).send(error.message) 
+  
+}
+    
+      
   })
 
   usersRouter

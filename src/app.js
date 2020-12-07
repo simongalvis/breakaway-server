@@ -7,6 +7,7 @@ const { NODE_ENV } = require('./config')
 const {CLIENT_ORIGIN} = require('./config');
 const usersRouter = require('./users/users-router')
 const activitiesRouter = require('./activities/activities-router')
+const bcrypt = require('bcrypt')
 
 const app = express()
 
