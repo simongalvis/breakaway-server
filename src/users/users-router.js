@@ -33,8 +33,8 @@ const serializeUser = user => ({
       const salt = await bcrypt.genSalt()
       const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
-      console.log(req.body.password)
-      console.log(hashedPassword)
+      //console.log(req.body.password)
+      //console.log(hashedPassword)
 
       const { fullname, username } = req.body
       const password = hashedPassword;
