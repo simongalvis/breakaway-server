@@ -344,6 +344,74 @@ describe(`GET /api/activities/:activity_id`, () => {
       })
     })
   })
+describe(`POST /api/users/login`, () =>{
+  context(`Given there are no users in the database`, () =>{
+    it(`responds with an error`, () =>{
+      const userCredentials = {
+        username: 'Bob Sample',
+        password: 'Samplepw'
+      }
+      return supertest(app)
+        .post(`/api/users/login`)
+        .send(userCredentials)
+        .expect(400)
+    })
+  context(`Given there are users in the database`, ()  =>{
+    context(`Given invalid credentials are submitted`, () =>{
+      it(`responds with 400 and an error message`, () =>{
+        const userCredentials = {
+          fullname:'Bob Sample',
+          username: 'bobsample',
+          password: 'Samplepw'
+        }
+        const invalidPasswordCredentials = {
+          username: 'bobsample',
+          password: 'WrongSamplepw'
+        }
+        const invalidUsernameCredentials = {
+          username: 'nonexistentusername',
+          password: 'WrongSamplepw'
+        }
+        return supertest(app)
+          .post(`/api/users`)
+          .send(userCredentials)
+          .expect(201)
+          .then(res => 
+            supertest(app)
+            .post(`/api/users/login`)
+            .send(invalidPasswordCredentials)
+            .expect(400, 'Not Allowed')) 
+            .then(res => 
+              supertest(app)
+            .post(`/api/users/login`)
+            .send(invalidUsernameCredentials)
+            .expect(400, 'Cannot find user'))
+      })
+    })
+  context(`Given valid credentials are submitted`, () =>{
+    it(`responds with 200 and 'Success`, () =>{
+      const userCredentials = {
+        fullname:'Bob Sample',
+        username: 'bobsample',
+        password: 'Samplepw'
+      }
+     
+      return supertest(app)
+        .post(`/api/users`)
+        .send(userCredentials)
+        .expect(201)
+        .then(res => 
+          supertest(app)
+          .post(`/api/users/login`)
+          .send(userCredentials)
+          .expect(200, 'Success')) 
+    })
+    
+  })  
+  })  
+  })
+
+})
 })
 
 
