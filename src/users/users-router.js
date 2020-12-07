@@ -33,8 +33,8 @@ const serializeUser = user => ({
       const salt = await bcrypt.genSalt()
       const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
-      //console.log(salt)
-      //console.log(hashedPassword)
+      console.log(req.body.password)
+      console.log(hashedPassword)
 
       const { fullname, username } = req.body
       const password = hashedPassword;
@@ -50,7 +50,7 @@ const serializeUser = user => ({
       newUser.password = password;
       newUser.username = username;
   
-      UsersService.insertUser(
+       UsersService.insertUser(
         req.app.get('db'),
         newUser
       )
@@ -59,9 +59,9 @@ const serializeUser = user => ({
             .status(201)
             .location(path.posix.join(req.originalUrl, `/${user.id}`))
             .json(serializeUser(user))
-        })
-        
-        
+        }) 
+       //res.status(201).send()
+      
     }
     
 catch(error){
@@ -72,7 +72,39 @@ catch(error){
     
       
   })
+   usersRouter
+    .route(`/login`)
+    .post(jsonParser, async (req, res, next) => {
 
+      const knexInstance = req.app.get('db')
+      UsersService.getAllUsers(knexInstance)
+      .then(users => users.find(user => user.fullname == req.body.fullname))
+      .then(async user => {if(user == null) {
+         res.status(400).send(`Cannot find user`)
+      }
+      try{
+       if( await bcrypt.compare(req.body.password, user.password)){
+         res.send('Success')
+       }
+       else{
+         res.status(200).send('Not Allowed')
+       }
+      }
+      catch{
+        res.status(500).send()
+      }})
+     /*  UsersService.getAllUsers(knexInstance)
+      .then(users => {
+        res.json(users.map(serializeUser))
+      })
+      .catch(next)  */
+        
+      
+//res.status(200).send(users);
+
+  })
+    
+ 
   usersRouter
   .route('/:user_id')
   .all((req, res, next) => {
@@ -126,5 +158,7 @@ catch(error){
       })
       .catch(next)
   })
+
+  
 
   module.exports = usersRouter
