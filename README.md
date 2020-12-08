@@ -10,13 +10,13 @@
 ## Screenshots
 
 - Activities Page<br/>
-![Activities Page](/src/images/sample-hero.jpg)
+![Activities Page](/images/sample-hero.jpg)
 
 - Login Page
-![Login Page](/src/images/breakaway-login.png)
+![Login Page](/images/breakaway-login.png)
 
 - Add Activity Page
-![Add Activity Page](/src/images/breakaway-add-activity.png)
+![Add Activity Page](/images/breakaway-add-activity.png)
 
 
 
@@ -40,23 +40,23 @@ In the project directory, you can run:
 - Simon Galvis
 
 ## Setup 
-- Download this code and run ```sh npm install ``` to install dependencies needed to run the server
+- Download this code and run ``` npm install ``` to install dependencies needed to run the server
 
-- Run the server locally in developer mode using ```sh npm run dev```
+- Run the server locally in developer mode using ``` npm run dev```
 
-- Run the server regularly locally using ```sh npm run```
+- Run the server regularly locally using ``` npm run```
 
-- Get a list of users: ```sh GET /api/users```
+- Get a list of users: ``` GET /api/users```
 
-- Get a specific user: ```sh GET /api/users/user_id```
+- Get a specific user: ``` GET /api/users/user_id```
 
-- Get a list of activities: ```sh GET /api/activities```
+- Get a list of activities: ``` GET /api/activities```
 
-- Get a specific activity: ```sh GET /api/activities/activity_id```
+- Get a specific activity: ``` GET /api/activities/activity_id```
 
-- Post a user: ```sh POST /api/users```
+- Post a user: ``` POST /api/users```
 
-- Post an activity: ```sh POST /api/activities```
+- Post an activity: ``` POST /api/activities```
 
 
 
