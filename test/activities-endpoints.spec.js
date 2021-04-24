@@ -6,7 +6,7 @@ const { makeUsersArray } = require('./users.fixtures')
 
 
 
-describe.only('Activities Endpoints', function(){
+describe('Activities Endpoints', function(){
 let db
 
 before('make knex instance', () => {
