@@ -29,6 +29,7 @@ app.get('/', (req, res) =>{
  app.use(function errorHandler(error, req, res, next) {
        let response
        res.header("Access-Control-Allow-Origin", "*");
+       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
        if (NODE_ENV === 'production') {
          response = { error: { message: 'server error' } }
