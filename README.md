@@ -5,7 +5,7 @@
 - https://breakaway-client.vercel.app/
 
 ## Summary
-- Breakaway users can create accounts and log activities such as runs, hikes, or runs. Upon subsequent logins, users will be able to see a list of their activities stored conveniently in one place. This is useful in allowing users to monitor their progress and challenge themselves by trying to match or surpass previous efforts.
+- Breakaway users can create accounts and log activities such as runs, hikes, or bike rides. Upon subsequent logins, users will be able to see a list of their activities stored conveniently in one place. This is useful in allowing users to monitor their progress and challenge themselves by trying to match or surpass previous efforts.
 
 ## Screenshots
 
